@@ -12,9 +12,9 @@
 ![](https://upload-images.jianshu.io/upload_images/16782311-4d65677b8581590c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 # 环境参数
-Go 1.10 以上
+Go 1.10
  
-操作系统 Linux(Ubuntu18.10) 、Win装Ubuntu 
+操作系统 MacOS 10.14.1
 
 IDE GoLand
 

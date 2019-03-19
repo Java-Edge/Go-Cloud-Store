@@ -80,3 +80,27 @@ func GetFileMetaHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Write(data)
 }
+
+// 下载文件
+func DownloadHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	fsha1 := r.Form.Get("filehash")
+	fm := meta.GetFileMeta(fsha1)
+
+	f, err := os.Open(fm.Location)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	defer f.Close()
+
+	// 得到文件句柄后,读取文件内容,由于文件较小,直接全部读取!
+	data, err := ioutil.ReadAll(f)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/octect-stream")
+	w.Header().Set("Content-Description", "attachment;filename=\""+fm.FileName+"\"")
+	w.Write(data)
+}
