@@ -5,6 +5,16 @@ import (
 	"fmt"
 )
 
+// User : 用户表model
+type User struct {
+	Username     string
+	Email        string
+	Phone        string
+	SignupAt     string
+	LastActiveAt string
+	Status       int
+}
+
 // 通过用户名及密码完成user表的注册
 func UserSignup(username string, password string) bool {
 	stmt, err := mydb.DBConn().Prepare(
@@ -69,4 +79,24 @@ func UpdateToken(username string, token string) bool {
 		return false
 	}
 	return true
+}
+
+// 查询用户信息
+func GetUserInfo(username string) (User, error) {
+	user := User{}
+
+	stmt, err := mydb.DBConn().Prepare(
+		"select user_name,signup_at from tbl_user where user_name=? limit 1")
+	if err != nil {
+		fmt.Println(err.Error())
+		return user, err
+	}
+	defer stmt.Close()
+
+	// 执行查询的操作
+	err = stmt.QueryRow(username).Scan(&user.Username, &user.SignupAt)
+	if err != nil {
+		return user, err
+	}
+	return user, nil
 }
